@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-en="Safety In Action" data-es="Seguridad En Acción">Safety In Action</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #032742 0%, #0863a8 100%);
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(3, 39, 66, 0.2);
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .lang-btn {
+            padding: 6px 14px;
+            border: 2px solid #0863a8;
+            background: white;
+            color: #0863a8;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: #0863a8;
+            color: white;
+        }
+
+        .lang-btn:hover {
+            background: #0863a8;
+            color: white;
+        }
+
+        .header {
+            border-bottom: 4px solid #0863a8;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #032742;
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .tagline {
+            color: #0863a8;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .video-container {
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f5f5f5;
+            position: relative;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(3, 39, 66, 0.85);
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            z-index: 10;
+        }
+
+        .video-overlay:hover {
+            background: rgba(3, 39, 66, 0.95);
+        }
+
+        .video-overlay.hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #032742;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .optional {
+            color: #0863a8;
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #0863a8;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="datetime-local"]:focus,
+        input[type="file"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #032742;
+            box-shadow: 0 0 0 3px rgba(8, 99, 168, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        input[type="file"] {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        #datetimeDisplay {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #0863a8;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            color: #032742;
+            font-weight: 500;
+        }
+
+        .file-label {
+            display: block;
+            color: #666;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn {
+            background-color: #0863a8;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background-color: #032742;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(3, 39, 66, 0.3);
+        }
+
+        .reset-btn {
+            background-color: #f0f0f0;
+            color: #032742;
+            border: 2px solid #0863a8;
+        }
+
+        .reset-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .success-message {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .error-message {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px !important;
+            }
+
+            .tagline {
+                font-size: 14px !important;
+            }
+
+            .lang-btn {
+                padding: 8px 12px !important;
+                font-size: 12px !important;
+            }
+
+            label {
+                font-size: 13px !important;
+            }
+
+            input[type="text"],
+            input[type="datetime-local"],
+            input[type="file"],
+            textarea,
+            #datetimeDisplay {
+                padding: 10px !important;
+                font-size: 16px !important;
+            }
+
+            textarea {
+                min-height: 100px !important;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            button {
+                padding: 12px 10px !important;
+                font-size: 14px !important;
+            }
+
+            .video-container iframe {
+                height: 200px !important;
+            }
+
+            .video-overlay {
+                font-size: 18px !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 12px;
+            }
+
+            h1 {
+                font-size: 20px !important;
+                margin-bottom: 5px !important;
+            }
+
+            .tagline {
+                font-size: 12px !important;
+                margin-bottom: 10px !important;
+            }
+
+            .header {
+                padding-bottom: 15px !important;
+                margin-bottom: 20px !important;
+            }
+
+            .form-group {
+                margin-bottom: 18px !important;
+            }
+
+            .video-container iframe {
+                height: 180px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 data-en="Safety In Action" data-es="Seguridad En Acción">Safety In Action</h1>
+            <p class="tagline" data-en="Use this form to report any unsafe conditions and near misses" data-es="Utilice este formulario para reportar cualquier condición insegura y casi accidentes">Use this form to report any unsafe conditions and near misses</p>
+            <div class="language-toggle">
+                <button class="lang-btn active" data-lang="en">English</button>
+                <button class="lang-btn" data-lang="es">Español</button>
+            </div>
+            <div class="video-container">
+                <div class="video-overlay" id="videoOverlay" data-en="How To Use This Form" data-es="Cómo Usar Este Formulario">How To Use This Form</div>
+                <iframe id="videoFrame" width="100%" height="300" src="https://www.youtube.com/embed/mADRra7QbSk?modestbranding=1" title="How To Use This Form" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="success-message" id="successMessage" data-en="Thank you! Your safety report has been submitted successfully." data-es="¡Gracias! Su reporte de seguridad ha sido enviado exitosamente.">Thank you! Your safety report has been submitted successfully.</div>
+        
+        <div class="error-message" id="errorMessage"></div>
+
+        <form id="safetyForm">
+            <div class="form-group">
+                <label for="name" data-en="Name" data-es="Nombre">Name</label>
+                <span class="optional" data-en="(optional)" data-es="(opcional)">(optional)</span>
+                <input type="text" id="name" name="name" data-en-placeholder="Enter your name" data-es-placeholder="Ingrese su nombre" placeholder="Enter your name">
+            </div>
+
+            <div class="form-group">
+                <label for="datetime" data-en="Date and Time" data-es="Fecha y Hora">Date and Time</label>
+                <div id="datetimeDisplay"></div>
+                <input type="hidden" id="datetime" name="datetime">
+            </div>
+
+            <div class="form-group">
+                <label for="image" data-en="Upload Image" data-es="Cargar Imagen">Upload Image</label>
+                <input type="file" id="image" name="image" accept="image/*" capture="environment">
+                <span class="file-label" data-en="Take or upload a photo from your phone" data-es="Tomar o cargar una foto de su teléfono">Take or upload a photo from your phone</span>
+            </div>
+
+            <div class="form-group">
+                <label for="comments" data-en="Comments" data-es="Comentarios">Comments</label>
+                <textarea id="comments" name="comments" data-en-placeholder="Describe the unsafe condition or near miss in detail..." data-es-placeholder="Describa la condición insegura o casi accidente en detalle..." placeholder="Describe the unsafe condition or near miss in detail..." required></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="submit-btn" data-en="Submit Report" data-es="Enviar Reporte">Submit Report</button>
+                <button type="reset" class="reset-btn" data-en="Clear Form" data-es="Limpiar Formulario">Clear Form</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+
+        // Azure Configuration
+        const AZURE_FUNCTION_URL = 'https://123.azurewebsites.net'; // Replace with your Azure Function URL
+        const RECIPIENT_EMAILS = [
+            'fsears@goodyearrubber.net',
+            'tocegueda@goodyearrubber.net',
+            'dcastellanos@goodyearrubber.net'
+        ]; // Add multiple Outlook recipients
+
+        // Language toggle functionality
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.dataset.lang;
+                setLanguage(lang);
+                resetVideo();
+            });
+        });
+
+        function setLanguage(lang) {
+            currentLang = lang;
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+
+            document.querySelectorAll('[data-en]').forEach(el => {
+                if (el.dataset[lang]) {
+                    el.textContent = el.dataset[lang];
+                }
+            });
+
+            document.querySelectorAll('[data-en-placeholder]').forEach(el => {
+                const placeholderKey = `${lang}Placeholder`;
+                if (el.dataset[placeholderKey]) {
+                    el.placeholder = el.dataset[placeholderKey];
+                }
+            });
+
+            const successMsg = document.getElementById('successMessage');
+            if (successMsg.dataset[lang]) {
+                successMsg.textContent = successMsg.dataset[lang];
+            }
+        }
+
+        // Update live date and time
+        function setCurrentDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            const dateTimeValue = `${year}-${month}-${day}T${hours}:${minutes}`;
+            const displayValue = `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
+            
+            document.getElementById('datetime').value = dateTimeValue;
+            document.getElementById('datetimeDisplay').textContent = displayValue;
+        }
+
+        function updateLiveDateTime() {
+            setCurrentDateTime();
+        }
+
+        // Handle form submission to Azure
+        document.getElementById('safetyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value || 'Anonymous';
+            const datetime = document.getElementById('datetime').value;
+            const comments = document.getElementById('comments').value;
+            const imageFile = document.getElementById('image').files[0];
+
+            // Validate required fields
+            if (!comments.trim()) {
+                showError('Comments field is required');
+                return;
+            }
+
+            try {
+                // Convert image to base64 if exists
+                let imageBase64 = null;
+                let imageName = null;
+                if (imageFile) {
+                    imageBase64 = await fileToBase64(imageFile);
+                    imageName = imageFile.name;
+                }
+
+                // Prepare data for Azure Function
+                const formData = {
+                    name: name,
+                    datetime: datetime,
+                    comments: comments,
+                    imageBase64: imageBase64,
+                    imageName: imageName,
+                    recipientEmails: RECIPIENT_EMAILS,
+                    language: currentLang
+                };
+
+                // Send to Azure Function
+                const response = await fetch(AZURE_FUNCTION_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    showSuccess();
+                    setTimeout(() => {
+                        document.getElementById('safetyForm').reset();
+                        setCurrentDateTime();
+                        hideSuccess();
+                    }, 2000);
+                } else {
+                    const errorData = await response.json();
+                    showError(errorData.message || 'Failed to submit form. Please try again.');
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                showError('An error occurred. Please try again.');
+            }
+        });
+
+        // Handle clear button
+        document.querySelector('.reset-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const datetimeValue = document.getElementById('datetime').value;
+            document.getElementById('safetyForm').reset();
+            document.getElementById('datetime').value = datetimeValue;
+        });
+
+        // Video overlay functionality
+        document.getElementById('videoOverlay').addEventListener('click', function() {
+            const videoFrame = document.getElementById('videoFrame');
+            videoFrame.src = videoFrame.src + '?autoplay=1';
+            this.classList.add('hidden');
+        });
+
+        function resetVideo() {
+            const videoFrame = document.getElementById('videoFrame');
+            const videoOverlay = document.getElementById('videoOverlay');
+            videoFrame.src = 'https://www.youtube.com/embed/mADRra7QbSk?modestbranding=1';
+            videoOverlay.classList.remove('hidden');
+        }
+
+        // Utility functions
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        function showSuccess() {
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function hideSuccess() {
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        // Initialize
+        window.addEventListener('load', function() {
+            setCurrentDateTime();
+            setInterval(updateLiveDateTime, 1000);
+        });
+    </script>
+</body>
+</html>
